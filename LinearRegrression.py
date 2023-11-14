@@ -66,6 +66,7 @@ for epoch in range(epochs):
     history_loss.append(epoch_loss)
     print("epoch{} loss: {}".format(epoch + 1, epoch_loss))
 
+# 输出结果
 for name, para in LR.named_parameters():
     print("para: {}    value: {}".format(name, para))
 
