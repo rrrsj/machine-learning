@@ -2,20 +2,7 @@ import torch
 import matplotlib.pyplot as plt
 import torch.utils.data as Data
 from torch import nn
-
-
-def generate_linear_data(weight, bias, num_example):
-    """
-
-    :param weight: torch.tensor | ndarray | py.List  生成线性数据的权重
-    :param bias: float | scaler 偏移量
-    :param num_example: int 生成的数据数量
-    :return: inputs, outputs
-    """
-    inputs = torch.normal(0, 1, (num_example, len(weight)))
-    outputs = torch.matmul(inputs, weight) + bias
-    outputs += torch.normal(0, 0.01, outputs.shape)
-    return inputs, outputs
+from uitls.linear_utils import *
 
 
 class LinearRegress(nn.Module):
@@ -49,26 +36,11 @@ data_iter = Data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
 # 模型
 LR = LinearRegress(2)
 lossFunction = nn.MSELoss()
-optimizer = torch.optim.SGD(LR.parameters(), lr=0.03)
+optim = torch.optim.SGD(LR.parameters(), lr=0.03)
 
 # 训练
-history_loss = []
 epochs = 5
-for epoch in range(epochs):
-    epoch_loss = 0.0
-    for (x, y) in data_iter:
-        optimizer.zero_grad()
-        output = LR.forward(x)
-        loss = lossFunction(output, y.view(-1, 1))
-        epoch_loss += loss.item()
-        loss.backward()
-        optimizer.step()
-    history_loss.append(epoch_loss)
-    print("epoch{} loss: {}".format(epoch + 1, epoch_loss))
-
-# 输出结果
-for name, para in LR.named_parameters():
-    print("para: {}    value: {}".format(name, para))
+history_loss = train_model(data_iter, model=LR, lossFunction=lossFunction, optimizer=optim, epochs=epochs)
 
 plt.plot(range(1, epochs + 1), history_loss)
 plt.xlabel("trained_epoch")
