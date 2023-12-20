@@ -4,7 +4,6 @@ from torch.utils import data
 import torchvision
 import torch
 from uitls.Animator import Animator
-from d2l import torch as d2l
 
 
 def get_fashion_mnist_labels(labels):
