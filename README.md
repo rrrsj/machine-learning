@@ -4,3 +4,5 @@
 * lda   
 * logistic regression
 * Regularization
+* SVM
+* 决策树
